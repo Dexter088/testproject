@@ -62,7 +62,8 @@
   			<tbody>
 
   			<?php
-   			showTree($_POST['path']);
+            $number = 0;
+   			showTree($_POST['path'], $number);
 			?>
 
   			</tbody>
