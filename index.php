@@ -15,40 +15,40 @@
  	</form>
 
  	<?php
- 	function showTree(string $folder): void
- 	{
- 		if (!is_dir($folder)) {
-      		echo "Folder not found";
-      		return;
-  		}
-    	// Получаем полный список файлов и каталогов внутри $folder
-  		$files = scandir($folder);
-  		foreach ($files as $file) {
-      		/* Отбрасываем текущий и родительский каталог */
-  			if ($file == '.' || $file == '..') {
-    			continue;
-  			}
+ 	function showTree(string $folder, int &$number): void {
+        if (!is_dir($folder)) {
+            echo "Folder not found";
+            return;
+        }
+        // Получаем полный список файлов и каталогов внутри $folder
+        $files = scandir($folder);
 
-      		$fullFilePath = $folder . '/' . $file; //Получаем полный путь к файлу
-      		/* Если это директория */
-      		if (is_dir($fullFilePath)) {       
-        		showTree($fullFilePath); /* С помощью рекурсии выводим содержимое полученной директории */
-       		} else {
-    			$size = filesize($fullFilePath);
-    			echo "
-      				<tr>
-      					<th scope='row'>1</th>
-      					<td>$folder</td>
-      					<td>$file</td>
-      					<td>$size</td>
-  	 			   	</tr>
-    			";
-   	  		}
-    	}
-  	}
- 
- 	/* Запускаем функцию для текущего каталога */
-	if (isset($_POST['path'])) { ?>
+        foreach ($files as $file) {
+            /* Отбрасываем текущий и родительский каталог */
+            if ($file == '.' || $file == '..') {
+                continue;
+            }
+
+            $fullFilePath = $folder . '/' . $file; //Получаем полный путь к файлу
+            /* Если это директория */
+            if (is_dir($fullFilePath)) {       
+                showTree($fullFilePath, $number); /* С помощью рекурсии выводим содержимое полученной директории */
+                continue;
+            }
+            $number++;
+            $size = filesize($fullFilePath);
+            echo "
+                <tr>
+                    <th scope='row'>$number</th>
+                    <td>$folder</td>
+                    <td>$file</td>
+                    <td>$size</td>
+                </tr>
+            ";
+        }
+    }
+    /* Запускаем функцию для текущего каталога */
+    if (isset($_POST['path'])) { ?>
 		<table class="table">
   			<thead class="thead-dark">
     			<tr>
