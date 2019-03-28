@@ -15,7 +15,7 @@
  	</form>
 
  	<?php
- 	function showTree(string $folder, int &$number): void {
+ 	function showTree(string $folder, int &$number, array &$array): void {
         if (!is_dir($folder)) {
             echo "Folder not found";
             return;
@@ -37,6 +37,13 @@
             }
             $number++;
             $size = filesize($fullFilePath);
+            $item = [
+                'number' => $number,
+                'folder' => $folder,
+                'file' => $file,
+                'size' => $size
+            ];
+            // $array[] = $item;
             echo "
                 <tr>
                     <th scope='row'>$number</th>
@@ -63,12 +70,19 @@
 
   			<?php
             $number = 0;
-   			showTree($_POST['path'], $number);
-			?>
+            $array = [];
+
+            
+            
+   			showTree($_POST['path'], $number, $array);
+            // var_dump($array);
+            ?>
+
 
   			</tbody>
 		</table> <?php
 	} ?>
 </body>
 </html>
+
 		
