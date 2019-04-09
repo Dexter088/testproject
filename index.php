@@ -8,29 +8,27 @@
 
 <body class="container">
 	<form action="index.php" method="POST" class="form-signin" style="width:5">
-		<h1 class="h3 mb-4  font-weight-normal">Search</h1>
+		<h1 class="h3 mb-5 font-weight-normal">Search</h1>
    		<label for="path" class="sr-only">Full path</label>
   		<input type="text" id="path" class="form-control" placeholder="Path" name="path" required autofocus>
 		<button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
  	</form>
 
  	<?php
- 	function showTree(string $folder, int &$number, array &$array): void {
+     function showTree(string $folder, int &$number, array &$array): void
+     {
         if (!is_dir($folder)) {
             echo "Folder not found";
             return;
         }
-        // Получаем полный список файлов и каталогов внутри $folder
         $files = scandir($folder);
 
         foreach ($files as $file) {
-            /* Отбрасываем текущий и родительский каталог */
             if ($file == '.' || $file == '..') {
                 continue;
             }
 
-            $fullFilePath = $folder . '/' . $file; //Получаем полный путь к файлу
-            /* Если это директория */
+            $fullFilePath = $folder . '/' . $file; 
             if (is_dir($fullFilePath)) {       
                 showTree($fullFilePath, $number); /* С помощью рекурсии выводим содержимое полученной директории */
                 continue;
@@ -43,7 +41,7 @@
                 'file' => $file,
                 'size' => $size
             ];
-            // $array[] = $item;
+            $array[] = $item;
             echo "
                 <tr>
                     <th scope='row'>$number</th>
@@ -54,7 +52,6 @@
             ";
         }
     }
-    /* Запускаем функцию для текущего каталога */
     if (isset($_POST['path'])) { ?>
 		<table class="table">
   			<thead class="thead-dark">
@@ -65,19 +62,15 @@
       				<th scope="col">Size</th>
     			</tr>
     		</thead>
-  			
   			<tbody>
 
   			<?php
             $number = 0;
             $array = [];
-
-            
-            
    			showTree($_POST['path'], $number, $array);
+
             // var_dump($array);
             ?>
-
 
   			</tbody>
 		</table> <?php
@@ -85,4 +78,3 @@
 </body>
 </html>
 
-		
